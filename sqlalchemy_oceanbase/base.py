@@ -16,7 +16,8 @@ from .reflection import OceanBaseTableDefinitionParser
 
 
 class OceanBaseDialect(pymysql.MySQLDialect_pymysql):
-    name = "oceanbase"
+    # not change dialect name, since it is a subclass of pymysql.MySQLDialect_pymysql
+    # name = "oceanbase"
 
     @util.memoized_property
     def _tabledef_parser(self):
