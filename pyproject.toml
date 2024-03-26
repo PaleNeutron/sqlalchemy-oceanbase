@@ -22,7 +22,7 @@ pytest = "^8.0.2"
 enable = true
 
 [tool.poetry.plugins."sqlalchemy.dialects"]
-"oceanbase.pymysql" = "sqlalchemy_oceanbase.dialect:OceanBaseDialect"
+"oceanbase.pymysql" = "sqlalchemy_oceanbase.base:OceanBaseDialect"
 
 
 [tool.ruff]
