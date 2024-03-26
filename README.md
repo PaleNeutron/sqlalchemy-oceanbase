@@ -21,5 +21,5 @@ pip install sqlalchemy-oceanbase
 ```python
 from sqlalchemy import create_engine
 
-create_engine('oceanbase+pymysql://user:password@host:port/dbname')
+create_engine('msyql+oceanbase://user:password@host:port/dbname')
 ```
