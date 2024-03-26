@@ -1,5 +1,7 @@
 import re
+
 from sqlalchemy.dialects.mysql.reflection import MySQLTableDefinitionParser, _re_compile
+
 
 class OceanBaseTableDefinitionParser(MySQLTableDefinitionParser):
     def __init__(self, dialect, preparer):
@@ -21,6 +23,7 @@ class OceanBaseTableDefinitionParser(MySQLTableDefinitionParser):
                         self.preparer._escape_identifier(_final),
                     )
                 ],
+                strict=False,
             )
         )
         ### end of block
@@ -28,15 +31,15 @@ class OceanBaseTableDefinitionParser(MySQLTableDefinitionParser):
         self._re_key = _re_compile(
             r"  "
             r"(?:(?P<type>\S+) )?KEY"
-            r"(?: +%(iq)s(?P<name>(?:%(esc_fq)s|[^%(fq)s])+)%(fq)s)?"
+            r"(?: +{iq}(?P<name>(?:{esc_fq}|[^{fq}])+){fq})?"
             r"(?: +USING +(?P<using_pre>\S+))?"
             r" +\((?P<columns>.+?)\)"
             r"(?: +USING +(?P<using_post>\S+))?"
-            r"(?: +(KEY_)?BLOCK_SIZE *[ =]? *(?P<keyblock>\S+))?"
+            r"(?: +(KEY_)?BLOCK_SIZE *[ =]? *(?P<keyblock>\S+) *(LOCAL)?)?"
             r"(?: +WITH PARSER +(?P<parser>\S+))?"
             r"(?: +COMMENT +(?P<comment>(\x27\x27|\x27([^\x27])*?\x27)+))?"
             r"(?: +/\*(?P<version_sql>.+)\*/ *)?"
-            r",?$" % quotes
+            r",?$".format(iq=quotes["iq"], esc_fq=quotes["esc_fq"], fq=quotes["fq"])
         )
 
         kw = quotes.copy()
@@ -44,13 +47,15 @@ class OceanBaseTableDefinitionParser(MySQLTableDefinitionParser):
         self._re_fk_constraint = _re_compile(
             r"  "
             r"CONSTRAINT +"
-            r"%(iq)s(?P<name>(?:%(esc_fq)s|[^%(fq)s])+)%(fq)s +"
+            r"{iq}(?P<name>(?:{esc_fq}|[^{fq}])+){fq} +"
             r"FOREIGN KEY +"
             r"\((?P<local>[^\)]+?)\) REFERENCES +"
-            r"(?P<table>%(iq)s[^%(fq)s]+%(fq)s"
-            r"(?:\.%(iq)s[^%(fq)s]+%(fq)s)?) *"
-            r"\((?P<foreign>(?:%(iq)s[^%(fq)s]+%(fq)s(?: *, *)?)+)\)"
+            r"(?P<table>{iq}[^{fq}]+{fq}"
+            r"(?:\.{iq}[^{fq}]+{fq})?) *"
+            r"\((?P<foreign>(?:{iq}[^{fq}]+{fq}(?: *, *)?)+)\)"
             r"(?: +(?P<match>MATCH \w+))?"
-            r"(?: +ON UPDATE (?P<onupdate>%(on)s))?"
-            r"(?: +ON DELETE (?P<ondelete>%(on)s))?"
-        ) % kw
+            r"(?: +ON UPDATE (?P<onupdate>{on}))?"
+            r"(?: +ON DELETE (?P<ondelete>{on}))?".format(
+                iq=quotes["iq"], esc_fq=quotes["esc_fq"], fq=quotes["fq"], on=kw["on"]
+            )
+        )
