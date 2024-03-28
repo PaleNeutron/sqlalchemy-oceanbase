@@ -4,8 +4,9 @@ from sqlalchemy.dialects.mysql.reflection import MySQLTableDefinitionParser, _re
 
 
 class OceanBaseTableDefinitionParser(MySQLTableDefinitionParser):
-    def __init__(self, dialect, preparer):
+    def __init__(self, dialect, preparer, *, default_schema=None):
         MySQLTableDefinitionParser.__init__(self, dialect, preparer)
+        self.default_schema = default_schema
 
     def _prep_regexes(self):
         super()._prep_regexes()
@@ -59,3 +60,14 @@ class OceanBaseTableDefinitionParser(MySQLTableDefinitionParser):
                 iq=quotes["iq"], esc_fq=quotes["esc_fq"], fq=quotes["fq"], on=kw["on"]
             )
         )
+
+    def _parse_constraints(self, line):
+        """Parse a CONSTRAINT line."""
+        ret = super()._parse_constraints(line)
+        # OceanBase show schema/database in foreign key constraint ddl, even if the schema/database is the default one
+        if ret:
+            type, spec = ret
+            if type == "fk_constraint":
+                if len(spec["table"]) == 2 and spec["table"][0] == self.default_schema:
+                    spec["table"] = spec["table"][1:]
+        return ret

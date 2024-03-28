@@ -29,4 +29,7 @@ class OceanBaseDialect(pymysql.MySQLDialect_pymysql):
 
         """
         preparer = self.identifier_preparer
-        return OceanBaseTableDefinitionParser(self, preparer)
+        default_schema = self.default_schema_name
+        return OceanBaseTableDefinitionParser(
+            self, preparer, default_schema=default_schema
+        )

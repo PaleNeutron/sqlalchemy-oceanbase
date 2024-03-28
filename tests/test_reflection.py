@@ -1,4 +1,7 @@
+import os
 import warnings
+
+from sqlalchemy import MetaData
 
 from sqlalchemy_oceanbase.base import OceanBaseDialect
 
@@ -24,3 +27,17 @@ def test_reflection_no_warning():
     with warnings.catch_warnings(record=True) as record:
         dialect._tabledef_parser.parse(ddl, "utf8")
         assert len(record) == 0, "\n" + "\n".join(str(r.message) for r in record)
+
+
+def test_reflection_online():
+    url = os.getenv("OBDB", None)
+    if url is None:
+        return
+    from sqlalchemy import create_engine
+
+    engine = create_engine(url)
+    meta = MetaData()
+    meta.reflect(bind=engine)
+    for t in meta.tables.values():
+        print(f"Table: {t.name}: {t.schema}")
+    assert "fund_manager_base_info" in meta.tables
