@@ -21,5 +21,14 @@ pip install sqlalchemy-oceanbase
 ```python
 from sqlalchemy import create_engine
 
-create_engine('msyql+oceanbase://user:password@host:port/dbname')
+engin = create_engine('msyql+oceanbase://user:password@host:port/dbname')
+```
+
+
+### Async model
+
+```python
+from sqlalchemy.ext.asyncio import create_async_engine
+
+engin = create_async_engine('msyql+oceanbase://user:password@host:port/dbname')
 ```

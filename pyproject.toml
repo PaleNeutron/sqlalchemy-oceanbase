@@ -25,7 +25,7 @@ enable = true
 
 [tool.poetry.plugins."sqlalchemy.dialects"]
 "mysql.oceanbase" = "sqlalchemy_oceanbase.base:OceanBaseDialect"
-
+"mysql.asyncoceanbase" = "sqlalchemy_oceanbase.base:AsyncOceanBaseDialect"
 
 [tool.ruff]
 target-version = "py310"
