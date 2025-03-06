@@ -25,7 +25,8 @@ def test_reflection_no_warning():
 """
     # dialect._tabledef_parser.parse(ddl, 'utf8')
     with warnings.catch_warnings(record=True) as record:
-        dialect._tabledef_parser.parse(ddl, "utf8")
+        state = dialect._tabledef_parser.parse(ddl, "utf8")
+        assert len(state.keys) == 5
         assert len(record) == 0, "\n" + "\n".join(str(r.message) for r in record)
 
 
