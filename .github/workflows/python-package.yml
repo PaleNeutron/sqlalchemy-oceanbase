@@ -43,14 +43,14 @@ jobs:
           key: venv-${{ hashFiles('poetry.lock') }}
       - name: Install the project dependencies
         run: poetry install
-      - name: Lint with flake8
+      - name: Lint with ruff
         run: |
           . .venv/bin/activate
-          echo PATH=$PATH >> $GITHUB_ENV
-          # stop the build if there are Python syntax errors or undefined names
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --exclude .venv,__init__.py
-          # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics --exclude .venv,__init__.py
+          pip install ruff==0.11.6
+          # Run ruff linter
+          ruff check . --exclude .venv --output-format=github
+          # Run ruff formatter in check mode
+          ruff format . --exclude .venv --check
       - name: Test with pytest
         run: |
           pytest
