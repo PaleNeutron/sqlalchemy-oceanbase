@@ -1,5 +1,9 @@
 # Sqlalchemy-OceanBase
 
+[![](https://img.shields.io/pypi/v/sqlalchemy-oceanbase)](https://pypi.org/project/sqlalchemy-oceanbase/)
+[![PyPI - License](https://img.shields.io/pypi/l/sqlalchemy-oceanbase)](LICENSE)
+[![Python Version](https://img.shields.io/pypi/pyversions/sqlalchemy-oceanbase)](https://pypi.org/project/sqlalchemy-oceanbase/)
+
 OceanBase mysql tenant use pymysql to connect to OceanBase database.
 
 See [OceanBase Document](https://en.oceanbase.com/docs/common-oceanbase-database-10000000000829751)
