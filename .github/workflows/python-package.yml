@@ -53,6 +53,7 @@ jobs:
           ruff format . --exclude .venv --check
       - name: Test with pytest
         run: |
+          . .venv/bin/activate
           pytest
 
   publish:
